@@ -1,13 +1,25 @@
-FROM python:3.9.3
+FROM python:3.9-slim as builder
 
-RUN pip install --upgrade pip
+WORKDIR /app
 
-RUN adduser -D myuser
-USER myuser
-WORKDIR /home/myuser
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-COPY --chown=myuser:myuser requirements.txt requirements.txt
-RUN pip install --user -r requirements.txt
-COPY --chown=myuser:myuser ./src .
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc
 
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY ./src .
+
+
+FROM python:3.9-slim
+
+COPY --from=builder /opt/venv /opt/venv
+
+WORKDIR /app
+ENV PATH="/opt/venv/bin:$PATH"
 CMD [ "python", "-u", "./main.py" ]
