@@ -1,6 +1,7 @@
 FROM python:3.8 AS builder
 COPY requirements.txt .
 
-RUN pip install --user -r -requirements.txt
+RUN pip freeze > requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD [ "python", "-u", "./main.py" ]
