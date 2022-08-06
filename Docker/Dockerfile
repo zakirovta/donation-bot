@@ -13,7 +13,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-COPY ./src .
+
 
 
 FROM python:3.9-slim
@@ -22,4 +22,5 @@ COPY --from=builder /opt/venv /opt/venv
 
 WORKDIR /app
 ENV PATH="/opt/venv/bin:$PATH"
+COPY ./src .
 CMD [ "python", "-u", "./main.py" ]
