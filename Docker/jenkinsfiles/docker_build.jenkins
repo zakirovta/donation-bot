@@ -15,7 +15,8 @@ pipeline {
             steps {
                 echo " ============== start building image =================="
                 dir ('Docker') {
-                        sh 'docker build . '
+                        sh 'docker build --tag telegrambot:$BUILD_NUMBER .'
+                        sh 'docker run telegrambot:$BUILD_NUMBER'
                 }
             }
         }
