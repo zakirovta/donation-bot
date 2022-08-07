@@ -7,7 +7,7 @@ pipeline {
         label 'master'
         }
     options {
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        buildDiscarder(logRotator(numToKeepStr: '2', artifactNumToKeepStr: '2'))
         timestamps()
     }
     stages {
@@ -16,7 +16,6 @@ pipeline {
                 echo " ============== start building image =================="
                 dir ('Docker') {
                         sh 'docker build --tag telegrambot:$BUILD_NUMBER .'
-                        sh 'docker run telegrambot:$BUILD_NUMBER'
                 }
             }
         }
